@@ -1,34 +1,48 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -O2
+CXXFLAGS = -std=c++11 -Wall -Wextra -O2
 LDFLAGS = -lm
 
+# Directory structure
+SRC_DIR = src
+BUILD_DIR = build
+BIN_DIR = bin
+TARGET = $(BIN_DIR)/programa_imagen
+
 # Source files
-SOURCES = main.cpp buddy_allocator.cpp image_processor.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = programa_imagen
+SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 
 # Header files with STB
-INCLUDES = -I./
+INCLUDES = -I./$(SRC_DIR)
+LIBS = $(SRC_DIR)/stb_image.h $(SRC_DIR)/stb_image_write.h
 
-# Libraries
-LIBS = stb_image.h stb_image_write.h
+# Create necessary directories
+MKDIR_P = mkdir -p
 
-all: $(EXECUTABLE)
+all: directories $(LIBS) $(TARGET)
 
-$(EXECUTABLE): $(OBJECTS)
+directories:
+	$(MKDIR_P) $(BUILD_DIR)
+	$(MKDIR_P) $(BIN_DIR)
+
+$(TARGET): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
-%.o: %.cpp $(LIBS)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-# Download STB libraries if they don't exist
-stb_image.h:
-	curl -o stb_image.h https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
+$(SRC_DIR)/stb_image.h:
+	$(MKDIR_P) $(SRC_DIR)
+	curl -o $@ https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
 
-stb_image_write.h:
-	curl -o stb_image_write.h https://raw.githubusercontent.com/nothings/stb/master/stb_image_write.h
+$(SRC_DIR)/stb_image_write.h:
+	$(MKDIR_P) $(SRC_DIR)
+	curl -o $@ https://raw.githubusercontent.com/nothings/stb/master/stb_image_write.h
 
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+	rm -rf $(BUILD_DIR) $(BIN_DIR)
 
-.PHONY: all clean
+clean_objs:
+	rm -f $(OBJECTS)
+
+.PHONY: all clean clean_objs directories

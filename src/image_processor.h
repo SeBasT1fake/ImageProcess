@@ -1,6 +1,5 @@
 #ifndef IMAGE_PROCESSOR_H
 #define IMAGE_PROCESSOR_H
-
 #include <string>
 #include "buddy_allocator.h"
 
