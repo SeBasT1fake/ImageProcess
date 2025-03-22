@@ -6,7 +6,7 @@ LDFLAGS = -lm
 SRC_DIR = src
 BUILD_DIR = build
 BIN_DIR = bin
-TARGET = $(BIN_DIR)/programa_imagen
+TARGET = $(BIN_DIR)/program_image
 
 # Source files
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
