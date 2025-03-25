@@ -1,8 +1,4 @@
-Of course! Here's your improved and translated `README.md` in **English**, ready to copy and paste into your GitHub repository:
 
----
-
-```markdown
 # Image Processor with Buddy System
 
 This C++ project implements an image processor capable of performing **rotation** and **scaling** operations on images, using two different memory management methods: the standard dynamic allocation (`new/delete`) and a custom **Buddy System** allocator.
@@ -15,15 +11,22 @@ This C++ project implements an image processor capable of performing **rotation*
 
 ## Project Structure
 
-```
+
 imageProcess/
+
 ├── Makefile
+
 ├── src/               # Source code (.cpp and .h)
+
 ├── bin/               # Compiled executable
+
 ├── build/             # Object files (.o)
+
 ├── assets/            # Input images
+
 ├── out/               # Output images
-```
+
+
 
 ## Compilation
 
@@ -93,10 +96,3 @@ At the end of the execution, the program prints:
 - Processing time using both memory modes
 - Memory usage with and without the Buddy System
 - Original and final image dimensions
-
----
-```
-
----
-
-✅ This is 100% ready to paste into your GitHub repository as your `README.md`. Let me know if you want me to include badges (e.g. C++ version, build status), screenshots, or example output logs!
