@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -O2
+CXXFLAGS = -std=c++11 -Wall -Wextra -Wno-missing-field-initializers -O
 LDFLAGS = -lm
 
 # Directory structure

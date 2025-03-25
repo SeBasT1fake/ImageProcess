@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
     auto durationConventional = std::chrono::duration_cast<std::chrono::milliseconds>(endConventional - startConventional);
     
     // Get memory usage for conventional allocation
-    struct mallinfo mallocInfo = mallinfo();
+    struct mallinfo2 mallocInfo = mallinfo2();
     size_t conventionalMemory = mallocInfo.uordblks; // Bytes in use
     
     // Process with Buddy System allocation

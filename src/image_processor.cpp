@@ -156,22 +156,10 @@ void ImageProcessor::rotateImage(double angle) {
     double cosA = std::cos(radians);
     double sinA = std::sin(radians);
     
-    // Calculate new image dimensions
-    int oldWidth = width;
-    int oldHeight = height;
-    
-    // Find the new bounding box dimensions
-    double newWidthF = std::abs(oldWidth * cosA) + std::abs(oldHeight * sinA);
-    double newHeightF = std::abs(oldWidth * sinA) + std::abs(oldHeight * cosA);
-    
-    int newWidth = static_cast<int>(std::ceil(newWidthF));
-    int newHeight = static_cast<int>(std::ceil(newHeightF));
-    
-    // Center points
-    double oldCenterX = oldWidth / 2.0;
-    double oldCenterY = oldHeight / 2.0;
-    double newCenterX = newWidth / 2.0;
-    double newCenterY = newHeight / 2.0;
+    // Calculate new image dimensions to fully contain rotated image
+    double diagonalLength = std::sqrt(width * width + height * height);
+    int newWidth = static_cast<int>(std::ceil(diagonalLength));
+    int newHeight = static_cast<int>(std::ceil(diagonalLength));
     
     // Allocate memory for the rotated image
     size_t newSize = newWidth * newHeight * channels * sizeof(unsigned char);
@@ -186,19 +174,26 @@ void ImageProcessor::rotateImage(double angle) {
     // Initialize rotated image to black (0)
     std::memset(rotatedData, 0, newSize);
     
+    // Center points
+    double oldCenterX = width / 2.0;
+    double oldCenterY = height / 2.0;
+    double newCenterX = newWidth / 2.0;
+    double newCenterY = newHeight / 2.0;
+    
     // Perform rotation with bilinear interpolation
     for (int y = 0; y < newHeight; y++) {
         for (int x = 0; x < newWidth; x++) {
-            // Translate to center
-            double xNew = x - newCenterX;
-            double yNew = y - newCenterY;
+            // Translate point relative to the center of the new image
+            double xRel = x - newCenterX;
+            double yRel = y - newCenterY;
             
-            // Rotate
-            double xOld = xNew * cosA - yNew * sinA + oldCenterX;
-            double yOld = xNew * sinA + yNew * cosA + oldCenterY;
+            // Rotate point back to original image coordinates
+            // Note the negative sine for rotation in the opposite direction
+            double xOld = xRel * cosA + yRel * sinA + oldCenterX;
+            double yOld = -xRel * sinA + yRel * cosA + oldCenterY;
             
-            // Check if the pixel is within the old image
-            if (xOld >= 0 && xOld < oldWidth - 1 && yOld >= 0 && yOld < oldHeight - 1) {
+            // Check if the pixel is within the old image bounds
+            if (xOld >= 0 && xOld < width - 1 && yOld >= 0 && yOld < height - 1) {
                 // Interpolate and set each channel
                 for (int c = 0; c < channels; c++) {
                     unsigned char value = bilinearInterpolation(imageData, xOld, yOld, c);
