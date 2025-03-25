@@ -1,83 +1,102 @@
+Of course! Here's your improved and translated `README.md` in **English**, ready to copy and paste into your GitHub repository:
+
+---
+
+```markdown
 # Image Processor with Buddy System
 
-Este programa implementa un procesador de imágenes en C++ que permite realizar operaciones de rotación y escalado, utilizando dos métodos diferentes de gestión de memoria: la asignación convencional (new/delete) y el sistema Buddy System.
+This C++ project implements an image processor capable of performing **rotation** and **scaling** operations on images, using two different memory management methods: the standard dynamic allocation (`new/delete`) and a custom **Buddy System** allocator.
 
-## Requisitos
+## Requirements
 
-- Sistema operativo compatible con C++ (Linux, macOS, Windows con WSL)
-- Compilador g++ con soporte para C++11
-- Biblioteca stb_image y stb_image_write (se descargan automáticamente durante la compilación)
-- curl (para descargar las bibliotecas durante la compilación)
+- Operating system compatible with C++
+- `g++` compiler with C++11 or higher
+- `stb_image.h` and `stb_image_write.h` libraries already included in the `src/` folder
 
-## Compilación
+## Project Structure
 
-Para compilar el programa, siga estos pasos:
+```
+imageProcess/
+├── Makefile
+├── src/               # Source code (.cpp and .h)
+├── bin/               # Compiled executable
+├── build/             # Object files (.o)
+├── assets/            # Input images
+├── out/               # Output images
+```
 
-1. Descomprima el archivo .zip o .tar.gz
-2. Navegue al directorio del proyecto
-3. Ejecute el comando `make`
+## Compilation
+
+Make sure you have the `stb_image.h` and `stb_image_write.h` files inside the `src/` folder. Then run:
 
 ```bash
-cd image-processor-buddy
 make
 ```
 
-La compilación descargará automáticamente las bibliotecas stb_image necesarias para el procesamiento de imágenes.
+This will compile the source code and generate the executable at `bin/program_image`.
 
-## Ejecución
+## Execution
 
-El programa se ejecuta desde la línea de comandos con los siguientes parámetros:
-
-```bash
-./programa_imagen entrada.jpg salida.jpg -angulo 45 -escalar 1.5 [-buddy]
-```
-
-Parámetros:
-- `entrada.jpg`: archivo de imagen de entrada
-- `salida.jpg`: archivo donde se guarda la imagen procesada
-- `-angulo`: define el ángulo de rotación en grados
-- `-escalar`: define el factor de escalado
-- `-buddy`: activa el modo Buddy System (si se omite, se usará el modo convencional)
-
-## Ejemplo de uso
+The program is executed from the command line using the following format:
 
 ```bash
-./programa_imagen imagen.jpg resultado.jpg -angulo 30 -escalar 1.2 -buddy
+./bin/program_image assets/input.jpg out/output.jpg -angulo 45 -escalar 1.5 [-buddy]
 ```
 
-Este comando:
-1. Carga la imagen `imagen.jpg`
-2. Rota la imagen 30 grados en sentido horario
-3. Escala la imagen por un factor de 1.2
-4. Utiliza el Buddy System para la gestión de memoria
-5. Guarda el resultado en `resultado.jpg`
+### Parameters
 
-## Estructura del código
+- `input.jpg`: image file located in the `assets/` folder
+- `output.jpg`: name of the processed image to be saved in `out/`
+- `-angulo`: rotation angle in degrees
+- `-escalar`: scaling factor (e.g. 0.5, 1.5, 2.0)
+- `-buddy`: optional flag to enable Buddy System memory allocation
 
-- `main.cpp`: Punto de entrada del programa, manejo de argumentos y coordinación de operaciones
-- `buddy_allocator.h/cpp`: Implementación del sistema de asignación de memoria Buddy System
-- `image_processor.h/cpp`: Operaciones de procesamiento de imágenes (carga, rotación, escalado, guardado)
-- `stb_image.h`: Biblioteca para la carga de imágenes (descargada automáticamente)
-- `stb_image_write.h`: Biblioteca para guardar imágenes (descargada automáticamente)
+## Example
 
-## Detalles de implementación
+```bash
+./bin/program_image assets/image.jpg out/result.jpg -angulo 30 -escalar 1.2 -buddy
+```
+
+This command will:
+1. Load the input image from `assets/image.jpg`
+2. Rotate the image by 30 degrees (clockwise)
+3. Scale the image by a factor of 1.2
+4. Use the Buddy System for memory allocation
+5. Save the processed image as `out/result.jpg`
+
+## Source Files
+
+- `main.cpp`: Program entry point, command-line parsing and control flow
+- `buddy_allocator.h/cpp`: Implementation of the Buddy memory allocator
+- `image_processor.h/cpp`: Image operations (load, rotate, scale, save)
+- `stb_image.h`: Header for loading image data (included in `src/`)
+- `stb_image_write.h`: Header for writing image data (included in `src/`)
+
+## Implementation Details
 
 ### Buddy System
 
-El sistema Buddy implementado:
-- Inicia con un bloque único de memoria de tamaño 2^N
-- Divide los bloques recursivamente en "buddies" (pares) cuando se necesita un bloque de menor tamaño
-- Fusiona bloques contiguos cuando se liberan para evitar la fragmentación
-- Mantiene un seguimiento de los bloques asignados y disponibles
+The custom Buddy allocator:
+- Initializes with a power-of-two memory pool
+- Recursively splits memory into buddy pairs to fit allocations
+- Merges adjacent free buddies to reduce fragmentation
+- Tracks allocated and free blocks efficiently
 
-### Operaciones de imagen
+### Image Operations
 
-- **Rotación**: Implementa rotación mediante interpolación bilineal para mantener la calidad
-- **Escalado**: Utiliza interpolación bilineal para redimensionar la imagen manteniendo la proporción
+- **Rotation**: Uses bilinear interpolation around the center of the image
+- **Scaling**: Maintains aspect ratio with smooth bilinear resizing
 
-## Comparación de rendimiento
+## Performance Comparison
 
-El programa compara automáticamente:
-- Tiempo de procesamiento con y sin Buddy System
-- Consumo de memoria con ambos métodos
-- Muestra los resultados al finalizar el procesamiento
+At the end of the execution, the program prints:
+- Processing time using both memory modes
+- Memory usage with and without the Buddy System
+- Original and final image dimensions
+
+---
+```
+
+---
+
+✅ This is 100% ready to paste into your GitHub repository as your `README.md`. Let me know if you want me to include badges (e.g. C++ version, build status), screenshots, or example output logs!

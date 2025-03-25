@@ -14,12 +14,12 @@ OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 
 # Header files with STB
 INCLUDES = -I./$(SRC_DIR)
-LIBS = $(SRC_DIR)/stb_image.h $(SRC_DIR)/stb_image_write.h
 
 # Create necessary directories
 MKDIR_P = mkdir -p
 
-all: directories $(LIBS) $(TARGET)
+# 👇 Esta línea permite que make funcione correctamente por defecto
+all: directories $(TARGET)
 
 directories:
 	$(MKDIR_P) $(BUILD_DIR)
@@ -31,16 +31,10 @@ $(TARGET): $(OBJECTS)
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-$(SRC_DIR)/stb_image.h:
-	$(MKDIR_P) $(SRC_DIR)
-	curl -o $@ https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
-
-$(SRC_DIR)/stb_image_write.h:
-	$(MKDIR_P) $(SRC_DIR)
-	curl -o $@ https://raw.githubusercontent.com/nothings/stb/master/stb_image_write.h
-
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR)
+	@echo "Cleaning compiled files..."
+	rm -rf $(BUILD_DIR)
+	rm -f $(TARGET)
 
 clean_objs:
 	rm -f $(OBJECTS)
